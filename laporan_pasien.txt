@@ -1,10 +1,10 @@
 
-=== Laporan Evaluasi Pasien siti (ID: 1) ===
+=== Laporan Evaluasi Pasien Cia (ID: 1) ===
 Usia               : 19 tahun
 Jenis Kelamin      : wanita
-BMI                : 18.65
-Glukosa            : 7.50 mmol/L
-Tekanan Darah      : 118/85 mmHg
+BMI                : 19.05
+Glukosa            : 7.40 mmol/L
+Tekanan Darah      : 117/78 mmHg
 Kolesterol         : 4.00 mmol/L
 Status Merokok     : tidak
 Status Risiko      : Sehat

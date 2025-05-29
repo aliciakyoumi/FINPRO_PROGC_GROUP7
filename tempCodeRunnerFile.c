@@ -113,28 +113,17 @@ void evaluatePatient(struct Patient* p) {
 void displayPatients() {
     printf("\n=== Data Pasien ===\n");
     for (int i = 0; i < n; i++) {
-        struct Patient* p = &patients[i];
-
-        float bmi = calculateBMI(p->weight, p->height);
-        int score = 0;
-        score += scoreBMI(bmi, p->gender);
-        score += scoreGlucose(p->glucose);
-        score += scoreBP(p->systolic, p->diastolic);
-        score += scoreChol(p->cholesterol);
-        score += scoreSmoker(p->smokerStatus);
-        const char* status = overallRiskLevel(score);
-
-        printf("\n%d. %s (ID: %d)\n", i + 1, p->name, p->id);
-        printf("Usia               : %d tahun\n", p->age);
-        printf("Jenis Kelamin      : %s\n", p->gender);
-        printf("Tinggi Badan       : %.2f meter\n", p->height);
-        printf("Berat Badan        : %.2f kg\n", p->weight);
-        printf("BMI                : %.2f\n", bmi);
-        printf("Glukosa            : %.2f mmol/L\n", p->glucose);
-        printf("Tekanan Darah      : %.0f/%.0f mmHg\n", p->systolic, p->diastolic);
-        printf("Kolesterol         : %.2f mmol/L\n", p->cholesterol);
-        printf("Status Merokok     : %s\n", p->smokerStatus);
-        printf("Status Risiko      : %s\n", status);
+        printf("\n%d. %s (ID: %d)\n", i + 1, patients[i].name, patients[i].id);
+        printf("Usia               : %d tahun\n", patients[i].age);
+        printf("Jenis Kelamin      : %s\n", patients[i].gender);
+        printf("Tinggi Badan       : %.2f cm\n", patients[i].height);
+        printf("Berat Badan        : %.2f kg\n", patients[i].weight);
+        printf("BMI                : %.2f\n", patients[i].bmi);
+        printf("Glukosa            : %.2f mmol/L\n", patients[i].glucose);
+        printf("Tekanan Darah      : %.0f/%.0f mmHg\n", patients[i].systolic, patients[i].diastolic);
+        printf("Kolesterol         : %.2f mmol/L\n", patients[i].cholesterol);
+        printf("Status Merokok     : %s\n", patients[i].smokerStatus);
+        printf("Status Risiko      : %s\n", patients[i].status);
     }
 }
 
@@ -280,7 +269,7 @@ int main() {
             default:
                 printf("Pilihan tidak valid! Pilih angka 1-7!\n");
         }
-    } while (choice != 7);
+    } while (choice != 0);
 
     return 0;
 }
