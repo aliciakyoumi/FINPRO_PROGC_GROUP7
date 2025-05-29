@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>
+#include <ctype.h>
 #define MAX 100
 
 struct Patient {
@@ -18,6 +19,8 @@ struct Patient {
     float cholesterol;
     char smokerStatus[5]; // ya / tidak
 };
+
+char currentRole[10];
 
 struct Patient patients [MAX];
 int n = 0;  // jumlah data pasien saat ini
@@ -69,10 +72,20 @@ void inputPatient(struct Patient* p) {
     scanf("%d", &p->id);
     printf("Nama                    : ");
     scanf(" %[^\n]", p->name);
+    for (int i = 0; p->name[i]; i++) {
+        if (i == 0 || p->name[i - 1] == ' ') {
+            p->name[i] = toupper(p->name[i]);
+        } else {
+            p->name[i] = tolower(p->name[i]);
+        }
+    }
     printf("Usia (tahun)            : ");
     scanf("%d", &p->age);
     printf("Jenis Kelamin (pria/wanita): ");
     scanf("%s", p->gender);
+    for (int i = 0; p->gender[i]; i++) {
+        p->gender[i] = tolower(p->gender[i]);
+    }
     printf("Tinggi (meter)          : ");
     scanf("%f", &p->height);
     printf("Berat Badan (kg)        : ");
@@ -91,6 +104,9 @@ void inputPatient(struct Patient* p) {
     scanf("%f", &p->cholesterol);
     printf("Merokok? (ya/tidak)     : ");
     scanf("%s", p->smokerStatus);
+    for (int i = 0; p->smokerStatus[i]; i++) {
+        p->smokerStatus[i] = tolower(p->smokerStatus[i]);
+    }
 }
 
 void evaluatePatient(struct Patient* p) {
@@ -219,69 +235,97 @@ void newDatabase() {
 
 
 int main() {
-    char adminName[50], accessKey[10];
+    char adminName[50];
     int choice;
+    int exitProgram = 0;
 
     printf("=====================================\n");
     printf("   Sistem Evaluasi Data Pasien\n");
     printf("=====================================\n");
-    printf("Masukkan nama Anda: ");
-    scanf(" %[^\n]", adminName);
+    
+    while (!exitProgram) {
+        printf("Masukkan nama Anda: ");
+        scanf(" %[^\n]", adminName);
 
-    printf("Apakah Anda admin? (ya/tidak): ");
-    scanf("%s", accessKey);
-
-    if (strcmp(accessKey, "ya") != 0) {
-        printf("\nMaaf %s, Anda tidak dapat mengakses database pasien.\n", adminName);
-        return 0;
-    }
-    do {
-        printf("\n=====================================\n");
-        printf(" Menu:\n");
-        printf(" 1. Tambah Pasien Baru\n");
-        printf(" 2. Tampilkan Data Pasien\n");
-        printf(" 3. Hapus Data Pasien\n");
-        printf(" 4. Perbarui Data Pasien\n");
-        printf(" 5. Simpan ke File\n");
-        printf(" 6. Buat Database Baru\n");
-        printf(" 7. Keluar\n");
-        printf("=====================================\n");
-        printf("Pilihan Anda: ");
-        scanf("%d", &choice);
-
-        switch (choice) {
-            case 1:
-                if (n >= MAX) {
-                    printf("Database penuh!\n");
-                    break;
-                }
-                inputPatient(&patients[n]);
-                evaluatePatient(&patients[n]);
-                n++;
-                break;
-            case 2:
-                displayPatients();
-                break;
-            case 3:
-                deletePatient();
-                break;
-            case 4:
-                updatePatient();
-                break;
-            case 5:
-                saveToFile();
-                break;
-            case 6:
-                newDatabase();
-                break;
-            case 7:
-                printf("Keluar program...\n");
-                break;
-            default:
-                printf("Pilihan tidak valid! Pilih angka 1-7!\n");
+        printf("Masukkan peran Anda (Admin/Dokter/Perawat): ");
+        scanf("%s", currentRole);
+        for (int i = 0; currentRole[i]; i++) {
+            currentRole[i] = tolower(currentRole[i]);
         }
-    } while (choice != 7);
 
+        int sessionEnded = 0;
+        while (!sessionEnded) {
+            printf("\n=====================================\n");
+            printf(" Menu:\n");
+            if (strcmp(currentRole, "admin") == 0 || strcmp(currentRole, "dokter") == 0) {
+                printf(" 1. Tambah Pasien Baru\n");
+            }    
+            printf(" 2. Tampilkan Data Pasien\n");
+            if (strcmp(currentRole, "admin") == 0) {
+            printf(" 3. Hapus Data Pasien\n");
+            printf(" 4. Perbarui Data Pasien\n");
+            }
+            if (strcmp(currentRole, "admin") == 0 || strcmp(currentRole, "dokter") == 0) {
+            printf(" 5. Simpan ke File\n");
+            printf(" 6. Buat Database Baru\n");
+            }
+            printf(" 7. Keluar\n");
+            printf("=====================================\n");
+            printf("Pilihan Anda: ");
+            scanf("%d", &choice);
+
+            switch (choice) {
+                case 1:
+                    if (n >= MAX) {
+                        printf("Database penuh!\n");
+                        break;
+                    }
+                    if (strcmp(currentRole, "admin") == 0 || strcmp(currentRole, "dokter") == 0) {
+                        inputPatient(&patients[n]);
+                        evaluatePatient(&patients[n]);
+                        n++;
+                    }    
+                    break;
+                case 2:
+                    displayPatients();
+                    break;
+                case 3:
+                    deletePatient();
+                    break;
+                case 4:
+                    updatePatient();
+                    break;
+                case 5:
+                    saveToFile();
+                    break;
+                case 6:
+                    newDatabase();
+                    break;
+                case 7: {
+                    int subChoice;
+                    printf("\nApakah Anda ingin:\n");
+                    printf("1. Ganti Nama dan Role\n");
+                    printf("2. Keluar Program\n");
+                    printf("Pilihan Anda: ");
+                    scanf("%d", &subChoice);
+
+                    if (subChoice == 1) {
+                        sessionEnded = 1;
+                    } else if (subChoice == 2) {
+                        printf("Keluar program...\n");
+                        sessionEnded = 1;
+                        exitProgram = 1;
+                    } else {
+                        printf("Pilihan tidak valid! Kembali ke menu utama.\n");
+                    }
+                    break;
+                }    
+                default:
+                    printf("Pilihan tidak valid! Pilih angka 1-7!\n");
+            }
+        }    
+    }
+       
     return 0;
 }
 
