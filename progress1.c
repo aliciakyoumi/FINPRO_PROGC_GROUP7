@@ -80,6 +80,8 @@ void evaluateAndSave(struct Patient* p, FILE* file) {
     fprintf(file, "Total Skor Risiko: %d -> %s\n", score, overallRiskLevel(score));
 }
 
+//Menu yang dijalankan 
+//Menu 1--> Memasukkan data pasien
 void inputPasient(struct Patient* p) {
     printf("\n--- Input Data Pasien ke-%d ---\n", i + 1);
     printf("ID Pasien                       : ");
@@ -109,6 +111,61 @@ void inputPasient(struct Patient* p) {
     printf("Merokok? (ya/tidak)             : ");
     scanf("%s", patients[i].smokerStatus);
 }
+
+//Menu 2--> Menampilkan data pasien
+void displayPatients() {
+    printf("\n=== Data Pasien ===\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d. %s (ID: %d)\n", i+1, patients[i].name, patients[i].id);
+    }
+}
+
+//Menu 3--> Menghapus data pasien yang telah ada
+void deletePatient() {
+    int id, found = 0;
+    printf("Masukkan ID pasien yang ingin dihapus: ");
+    scanf("%d", &id);
+    for (int i = 0; i < n; i++) {
+        if (patients[i].id == id) {
+            for (int j = i; j < n-1; j++) {
+                patients[j] = patients[j+1];
+            }
+            n--;
+            found = 1;
+            printf("Pasien dengan ID %d berhasil dihapus.\n", id);
+            break;
+        }
+    }
+    if (!found) printf("Pasien dengan ID %d tidak ditemukan.\n", id);
+}
+
+//Menu 4--> Memperbarui data pasien yang telah ada
+void updatePatient() {
+    int id, found = 0;
+    printf("Masukkan ID pasien yang ingin diperbarui: ");
+    scanf("%d", &id);
+    for (int i = 0; i < n; i++) {
+        if (patients[i].id == id) {
+            printf("Input ulang data pasien:\n");
+            inputPatient(&patients[i]);
+            evaluatePatient(&patients[i]);
+            printf("Data pasien berhasil diperbarui.\n");
+            found = 1;
+            break;
+        }
+    }
+    if (!found) printf("Pasien dengan ID %d tidak ditemukan.\n", id);
+}
+
+//Menu 5--> Menyimpan data pasien ke file txt
+
+
+//Menu 6--> Membuat Database Baru
+void newDatabase() {
+    n = 0;
+    printf("Database pasien baru telah dibuat (data lama dihapus).\n");
+}
+
 
 int main() {
     char adminName[50], accessKey[10];
