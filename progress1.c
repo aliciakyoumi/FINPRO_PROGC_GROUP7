@@ -1,6 +1,7 @@
-
 #include <stdio.h>
 #include <string.h>
+
+#define MAX 100
 
 struct Patient {
     int id;
@@ -18,7 +19,7 @@ struct Patient {
     char smokerStatus[5]; // ya / tidak
 };
 
-struct Patient patients [100];
+struct Patient patients [MAX];
 int n = 0;  // jumlah data pasien saat ini
 
 float calculateBMI(float weight, float height) {
@@ -61,7 +62,38 @@ const char* overallRiskLevel(int totalScore) {
     else return "Risiko Tinggi";
 }
 
-void evaluateAndSave(struct Patient* p, FILE* file) {
+//Menu yang dijalankan 
+//Menu 1--> Memasukkan data pasien
+void inputPatient(struct Patient* p) {
+    printf("ID Pasien               : ");
+    scanf("%d", &p->id);
+    printf("Nama                    : ");
+    scanf(" %[^\n]", p->name);
+    printf("Usia (tahun)            : ");
+    scanf("%d", &p->age);
+    printf("Jenis Kelamin (pria/wanita): ");
+    scanf("%s", p->gender);
+    printf("Tinggi (meter)          : ");
+    scanf("%f", &p->height);
+    printf("Berat Badan (kg)        : ");
+    scanf("%f", &p->weight);
+    printf("Tekanan Darah Sistolik (mmHg): ");
+    scanf("%f", &p->systolic);
+    printf("Tekanan Darah Diastolik (mmHg): ");
+    scanf("%f", &p->diastolic);
+    printf("Suhu Tubuh (°C)         : ");
+    scanf("%f", &p->temperature);
+    printf("Denyut Jantung (bpm)    : ");
+    scanf("%d", &p->heartRate);
+    printf("Kadar Glukosa (mmol/L)  : ");
+    scanf("%f", &p->glucose);
+    printf("Kolesterol (mmol/L)     : ");
+    scanf("%f", &p->cholesterol);
+    printf("Merokok? (ya/tidak)     : ");
+    scanf("%s", p->smokerStatus);
+}
+
+void evaluatePatient(struct Patient* p) {
     float bmi = calculateBMI(p->weight, p->height);
     int score = 0;
     score += scoreBMI(bmi, p->gender);
@@ -70,47 +102,12 @@ void evaluateAndSave(struct Patient* p, FILE* file) {
     score += scoreChol(p->cholesterol);
     score += scoreSmoker(p->smokerStatus);
 
-    fprintf(file, "\n=== Laporan Evaluasi Pasien %s (%s) ===\n", p->name, p->id);
-    fprintf(file, "Usia: %d | Jenis Kelamin: %s\n", p->age, p->gender);
-    fprintf(file, "BMI: %.2f | Skor: %d\n", bmi, scoreBMI(bmi, p->gender));
-    fprintf(file, "Glukosa: %.2f mmol/L | Skor: %d\n", p->glucose, scoreGlucose(p->glucose));
-    fprintf(file, "Tekanan Darah: %.0f/%.0f mmHg | Skor: %d\n", p->systolic, p->diastolic, scoreBP(p->systolic, p->diastolic));
-    fprintf(file, "Kolesterol: %.2f mmol/L | Skor: %d\n", p->cholesterol, scoreChol(p->cholesterol));
-    fprintf(file, "Status Merokok: %s | Skor: %d\n", p->smokerStatus, scoreSmoker(p->smokerStatus));
-    fprintf(file, "Total Skor Risiko: %d -> %s\n", score, overallRiskLevel(score));
+
+    const char* status = overallRiskLevel(score);
+
+    printf("\nStatus Kesehatan Pasien %s (ID: %d): %s\n", p->name, p->id, status);
 }
 
-//Menu yang dijalankan 
-//Menu 1--> Memasukkan data pasien
-void inputPasient(struct Patient* p) {
-    printf("\n--- Input Data Pasien ke-%d ---\n", i + 1);
-    printf("ID Pasien                       : ");
-    scanf("%s", patients[i].id);
-    printf("Nama                            : ");
-    scanf(" %[^\n]", patients[i].name);
-    printf("Usia                            : ");
-    scanf("%d", &patients[i].age);
-    printf("Jenis Kelamin (pria/wanita)     : ");
-    scanf("%s", patients[i].gender);
-    printf("Tinggi (meter)                  : ");
-    scanf("%f", &patients[i].height);
-    printf("Berat Badan (kg)                : ");
-    scanf("%f", &patients[i].weight);
-    printf("Tekanan Darah Sistolik (mmHg)   : ");
-    scanf("%f", &patients[i].systolic);
-    printf("Tekanan Darah Diastolik (mmHg)  : ");
-    scanf("%f", &patients[i].diastolic);
-    printf("Suhu Tubuh (°C)                 : ");
-    scanf("%f", &patients[i].temperature);
-    printf("Denyut Jantung (bpm)            : ");
-    scanf("%d", &patients[i].heartRate);
-    printf("Kadar Glukosa (mmol/L)          : ");
-    scanf("%f", &patients[i].glucose);
-    printf("Kolesterol (mmol/L)             : ");
-    scanf("%f", &patients[i].cholesterol);
-    printf("Merokok? (ya/tidak)             : ");
-    scanf("%s", patients[i].smokerStatus);
-}
 
 //Menu 2--> Menampilkan data pasien
 void displayPatients() {
@@ -158,6 +155,39 @@ void updatePatient() {
 }
 
 //Menu 5--> Menyimpan data pasien ke file txt
+void saveToFile() {
+    FILE* file = fopen("laporan_pasien.txt", "w");
+    if (!file) {
+        printf("Gagal membuka file output!\n");
+        return;
+    }
+
+
+    for (int i = 0; i < n; i++) {
+        struct Patient* p = &patients[i];
+        float bmi = calculateBMI(p->weight, p->height);
+        int score = 0;
+        score += scoreBMI(bmi, p->gender);
+        score += scoreGlucose(p->glucose);
+        score += scoreBP(p->systolic, p->diastolic);
+        score += scoreChol(p->cholesterol);
+        score += scoreSmoker(p->smokerStatus);
+        const char* status = overallRiskLevel(score);
+
+
+        fprintf(file, "\n=== Laporan Evaluasi Pasien %s (ID: %d) ===\n", p->name, p->id);
+        fprintf(file, "Usia               : %d tahun\n", p->age);
+        fprintf(file, "Jenis Kelamin      : %s\n", p->gender);
+        fprintf(file, "BMI                : %.2f\n", bmi);
+        fprintf(file, "Glukosa            : %.2f mmol/L\n", p->glucose);
+        fprintf(file, "Tekanan Darah      : %.0f/%.0f mmHg\n", p->systolic, p->diastolic);
+        fprintf(file, "Kolesterol         : %.2f mmol/L\n", p->cholesterol);
+        fprintf(file, "Status Merokok     : %s\n", p->smokerStatus);
+        fprintf(file, "Status Risiko      : %s\n", status);
+    }
+    fclose(file);
+    printf("\nData berhasil disimpan ke 'laporan_pasien.txt'\n");
+}
 
 
 //Menu 6--> Membuat Database Baru
@@ -200,7 +230,7 @@ int main() {
 
         switch (choice) {
             case 1:
-                if (n >= 100) {
+                if (n >= MAX) {
                     printf("Database penuh!\n");
                     break;
                 }
