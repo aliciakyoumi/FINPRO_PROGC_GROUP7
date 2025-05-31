@@ -3,19 +3,19 @@
 #include "patient.h" // Mengimpor header definisi dan fungsi pasien
 
 /*
- * Cara kerja fungsi clearInputBuffer:
- * Fungsi ini membaca karakter dari input standar menggunakan getchar() hingga menemukan newline ('\n') atau end-of-file (EOF).
- * Ini akan membersihkan buffer input dan memastikan bahwa input yang tersisa tidak mengganggu operasi input berikutnya.
+ Cara kerja fungsi clearInputBuffer:
+ - Fungsi ini membaca karakter dari input standar menggunakan getchar() hingga menemukan newline ('\n') atau end-of-file (EOF).
+ - Setelah itu akan membersihkan buffer input.
  */
 void clearInputBuffer(void) { // Variabel untuk penampung karakter sementara
     int c;
     while ((c = getchar()) != '\n' && c != EOF); // Baca karakter sampai menemukan newline atau sampai akhir file/input
     }
 /*
- * Cara kerja fungsi createAndAddPatient:
- * Fungsi ini menambah pasien baru dengan meminta detail pasien dari pengguna,
- * memvalidasi input data dan menambahkan pasien tersebut ke database jika data valid.
- * Setelah itu, fungsi akan mengevaluasi data pasien yang baru dibuat.
+ Cara kerja fungsi createAndAddPatient:
+ - Fungsi ini menambah pasien baru dengan meminta detail pasien dari pengguna,
+ memvalidasi input data dan menambahkan pasien tersebut ke database jika data valid.
+ - Setelah itu, fungsi akan mengevaluasi data pasien yang baru dibuat.
  */
 void createAndAddPatient(void) {
     struct Patient newPatient; // Mendeklarasikan variabel struct pasien baru
@@ -24,9 +24,9 @@ void createAndAddPatient(void) {
         evaluatePatient(&newPatient);} // Evaluasi data pasien jika penambahan berhasil
     }
 /*
- * Cara kerja fungsi deletePatientData:
- * Fungsi ini menghapus data pasien berdasarkan ID yang dimasukkan pengguna.
- * Fungsi meminta ID pasien, memvalidasi input, kemudian menghapus pasien dari database.
+ Cara kerja fungsi deletePatientData:
+ - Fungsi ini menghapus data pasien berdasarkan ID yang dimasukkan pengguna.
+ - Fungsi meminta ID pasien, memvalidasi input, kemudian menghapus pasien dari database.
  */        
 void deletePatientData(void) {
     int id; // Variabel untuk menampung ID pasien
@@ -35,16 +35,16 @@ void deletePatientData(void) {
         clearInputBuffer(); // Bersihkan buffer input jika input tidak valid
         printf("Input ID tidak valid.\n"); // Informasi kesalahan input
         return;} // Menghentikan fungsi jika input salah
-    clearInputBuffer(); // Bersihkan buffer input agar tidak mengganggu input berikutnya
+    clearInputBuffer(); // Bersihkan buffer input 
     deletePatient(id); // Panggil fungsi untuk menghapus pasien berdasarkan ID
 }
 
 /*
- * Cara kerja fungsi updatePatientData:
- * Fungsi ini memperbarui data pasien yang sudah ada berdasarkan ID.
- * Fungsi meminta ID pasien, mengecek apakah pasien ada, lalu meminta input 
- * data baru dan mengganti data lama dengan data yang baru.
- * Fungsi juga menjaga agar ID pasien tidak berubah.
+ Cara kerja fungsi updatePatientData:
+ - Fungsi ini memperbarui data pasien yang sudah ada berdasarkan ID.
+ - Fungsi meminta ID pasien, mengecek apakah pasien ada, lalu meminta input 
+ data baru dan mengganti data lama dengan data yang baru.
+ - Fungsi juga menjaga agar ID pasien tidak berubah.
  */
 void updatePatientData(void) {
     int id; // Variabel untuk menampung ID pasien yang akan diperbarui
@@ -53,10 +53,10 @@ void updatePatientData(void) {
         clearInputBuffer(); // Bersihkan buffer jika input tidak valid
         printf("Input ID tidak valid.\n"); // Informasi kesalahan input
         return;} // Hentikan fungsi jika input tidak valid
-    clearInputBuffer(); // Bersihkan buffer input sebelum operasi selanjutnya
+    clearInputBuffer(); // Bersihkan buffer input 
 
     if (searchPatient(id) == NULL) {  // Cari pasien berdasarkan ID, cek apakah ada
-        printf("Pasien dengan ID %d tidak ditemukan. Tidak dapat memperbarui.\n", id); // Jika tidak ditemukan, beri info
+        printf("Pasien dengan ID %d tidak ditemukan. Tidak dapat memperbarui.\n", id); // Cetak informasi jika tidak ditemukan
         return;                       // Hentikan fungsi karena pasien tidak ditemukan
     }
     struct Patient p;                  // Variabel struct untuk data pasien baru
@@ -70,9 +70,8 @@ void updatePatientData(void) {
 }
 
 /*
- * Cara kerja fungsi searchPatientData:
- * Fungsi ini mencari data pasien berdasarkan ID yang dimasukkan pengguna
- * dan menampilkan detail pasien tersebut jika ditemukan.
+ Cara kerja fungsi searchPatientData:
+ - Fungsi ini mencari data pasien berdasarkan ID yang dimasukkan pengguna dan menampilkan detail pasien tersebut jika ditemukan.
  */
 void searchPatientData(void) {
     int id;                            // Variabel untuk menampung ID pasien yang dicari
@@ -87,10 +86,9 @@ void searchPatientData(void) {
 }
 
 /*
- * Cara kerja fungsi saveSinglePatientData:
- * Fungsi ini menyimpan laporan data pasien tunggal berdasarkan ID.
- * Fungsi meminta ID pasien, memvalidasi input lalu menyimpan laporan
- * jika pasien ditemukan dan proses simpan berhasil.
+ Cara kerja fungsi saveSinglePatientData:
+ - Fungsi ini menyimpan laporan data pasien tunggal berdasarkan ID.
+ - Fungsi meminta ID pasien, memvalidasi input lalu menyimpan laporan jika pasien ditemukan dan proses simpan berhasil.
  */
 void saveSinglePatientData(void) {
     int id;                            // Variabel untuk menampung ID pasien yang laporannya akan disimpan
@@ -107,8 +105,8 @@ void saveSinglePatientData(void) {
 }
 
 /*
- * Cara kerja fungsi checkPatientStatusData:
- * Fungsi ini memeriksa dan menampilkan status pasien berdasarkan ID yang dimasukkan pengguna.
+ Cara kerja fungsi checkPatientStatusData:
+ - Fungsi ini memeriksa dan menampilkan status pasien berdasarkan ID yang dimasukkan pengguna.
  */
 void checkPatientStatusData(void) {
     int id;                            // Variabel untuk menampung ID pasien yang statusnya ingin dicek
@@ -118,6 +116,6 @@ void checkPatientStatusData(void) {
         printf("Input ID tidak valid.\n");  // Pesan error input tidak valid
         return;                       // Hentikan fungsi jika input salah
     }
-    clearInputBuffer();                // Bersihkan buffer input agar siap untuk operasi berikutnya
+    clearInputBuffer();                // Bersihkan buffer input 
     viewPatientStatus(id);             // Tampilkan status pasien berdasarkan ID yang dimasukkan
 }
