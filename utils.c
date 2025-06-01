@@ -1,4 +1,4 @@
-#include "utils.h" // Mengimpor header utilitas umum
+#include "utils.h" // Mengimpor header utils
 #include "database.h" // Mengimpor header fungsi database
 #include "patient.h" // Mengimpor header definisi dan fungsi pasien
 

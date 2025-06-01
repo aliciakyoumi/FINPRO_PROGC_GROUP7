@@ -1,8 +1,8 @@
 // Header guard
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef UTILS_H // Cek apakah UTILS_H belum didefinisikan
+#define UTILS_H // Definisikan UTILS_H
 
-#include <stdio.h> //library untuk standar input/output
+#include <stdio.h> //library standar input/output
 
 void clearInputBuffer(void); // Deklarasi fungsi untuk membersihkan buffer input
 
