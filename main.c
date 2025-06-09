@@ -211,5 +211,6 @@ int main() {
                 }      
             }
         }
-    } return 0;       //program selesai
+    }
+    return 0;       //program selesai
 }
