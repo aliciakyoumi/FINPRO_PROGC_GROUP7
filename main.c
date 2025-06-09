@@ -109,7 +109,6 @@ int main() {
                 printf("Peran tidak valid. Silakan coba lagi.\n"); //role diluar admin, dokter, perawat
             }
         }
-    }
         int sessionEnded = 0;       //mengakhiri sesi
         while(!sessionEnded){       //loop sesi user
             displayMenu(role);      //tampilan menu berdasarkan role yg dipilih
@@ -152,7 +151,7 @@ int main() {
                     }
                     break;}
                 case 6: {           //pilihan simpan ke file .csv 
-                    if(checkPermission(role, ACTION_NEW_DATABASE)){
+                    if(checkPermission(role, ACTION_SAVE_CSV)){
                         exportToCSV();}             //memanggil fungsi untuk simpan ke file .csv
                     else {
                         printf("Anda tidak memiliki izin untuk mengekspor ke CSV.\n");
@@ -212,5 +211,5 @@ int main() {
                 }      
             }
         }
-    return 0;       //program selesai
+    } return 0;       //program selesai
 }
